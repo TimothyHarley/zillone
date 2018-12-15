@@ -20,7 +20,7 @@ class Listings extends React.Component {
     return (
       <div className="listings col">
         <h2>Listings</h2>
-        {listingsItemsComponents}
+        <ul>{listingsItemsComponents}</ul>
       </div>
     );
   }
