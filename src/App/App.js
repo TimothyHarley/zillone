@@ -4,9 +4,12 @@ import 'firebase/auth';
 
 import connection from '../helpers/data/connection';
 import Auth from '../components/Auth/Auth';
-import Listings from '../components/Listings/Listings';
 import MyNavbar from '../components/MyNavbar/MyNavbar';
+import Listings from '../components/Listings/Listings';
+import Building from '../components/Building/building';
+import ListingForm from '../components/ListingForm/listingForm';
 import listingRequests from '../helpers/data/listingRequests';
+
 import './App.scss';
 import authRequests from '../helpers/data/authRequests';
 
@@ -46,7 +49,6 @@ class App extends Component {
   }
 
   deleteOne = (listingId) => {
-    console.log(listingId);
     listingRequests.deleteListing(listingId)
       .then(() => {
         listingRequests.getRequest()
@@ -81,8 +83,10 @@ class App extends Component {
             listings={this.state.listings}
             deleteSingleListing={this.deleteOne}
             />
+          <Building />
         </div>
         <div className="row">
+          <ListingForm />
         </div>
       </div>
     );
