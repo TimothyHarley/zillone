@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './listingForm.scss';
+import authRequests from '../../helpers/data/authRequests';
 
 const defaultListing = {
   address: '',
@@ -14,6 +16,10 @@ const defaultListing = {
 };
 
 class ListingForm extends React.Component {
+  static propTypes = {
+    onSubmit: PropTypes.func,
+  }
+
   state = {
     newListing: defaultListing,
   }
@@ -31,7 +37,16 @@ formFieldStringState = (name, e) => {
 //   this.setState({ newListing: tempListing });
 // }
 
-addressChange = (e) => this.form
+addressChange = e => this.formFieldStringState('address', e);
+
+formSubmit = (e) => {
+  e.preventDefault();
+  const { onSubmit } = this.props;
+  const myListing = { ...this.state.newListing };
+  myListing.uid = authRequests.getCurrentUid();
+  onSubmit(myListing);
+  this.setState({ newListing: defaultListing });
+}
 
   addressChange = (e) => {
     this.formFieldStringState('address', e);
@@ -42,7 +57,7 @@ addressChange = (e) => this.form
     return (
       <div className="listing-form col">
         <h2>Add New Listing</h2>
-        <form>
+        <form onSubmit={this.formSubmit}>
           <div className="form-group">
            <label htmlFor="address">Address</label>
            <input
@@ -50,11 +65,11 @@ addressChange = (e) => this.form
            className="form-control"
            id="exampleInputEmail1"
            aria-describedby="emailHelp"
-           placeholder="Enter Address" 
+           placeholder="Enter Address"
            value={newListing.address}
            onChange={this.addressChange}/>
           </div>
-          <button>save</button>
+          <button className="btn btn-danger">Save Address</button>
         </form>
       </div>
     );
