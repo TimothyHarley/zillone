@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './listingForm.scss';
 import authRequests from '../../helpers/data/authRequests';
+import listingRequests from '../../helpers/data/listingRequests';
 
 const defaultListing = {
   address: '',
@@ -18,6 +19,8 @@ const defaultListing = {
 class ListingForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func,
+    isEditing: PropTypes.bool,
+    editId: PropTypes.string,
   }
 
   state = {
@@ -50,6 +53,17 @@ formSubmit = (e) => {
 
   addressChange = (e) => {
     this.formFieldStringState('address', e);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isEditing, editId } = this.props;
+    if (prevProps !== this.props && isEditing) {
+      listingRequests.getSingleListing(editId)
+        .then((listing) => {
+          this.setState({ newListing: listing.data });
+        })
+        .catch(err => console.error('error with getSingleListing', err));
+    }
   }
 
   render() {
